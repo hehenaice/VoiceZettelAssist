@@ -36,9 +36,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -400,13 +402,13 @@ private fun TriggerComboPicker(
             readOnly = true,
             label = { Text(stringResource(R.string.settings_trigger_dropdown_label)) },
             trailingIcon = {
-                androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .menuAnchor()
         )
-        androidx.compose.material3.ExposedDropdownMenu(
+        DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
