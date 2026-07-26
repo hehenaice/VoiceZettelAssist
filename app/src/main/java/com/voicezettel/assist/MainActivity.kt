@@ -246,7 +246,7 @@ private fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
                 Text(
                     text = "VoiceZettelAssist v1.0.0\n" +
                         "Listens for a hardware key combo, records a short voice note, " +
-                        "transcribes it with Gemini 1.5 Flash, and appends it to today's " +
+                        "transcribes it with Gemini 2.0 Flash, and appends it to today's " +
                         "Markdown daily note inside your Zettel Notes vault.",
                     style = MaterialTheme.typography.bodyMedium
                 )

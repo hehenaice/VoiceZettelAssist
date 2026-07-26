@@ -2,7 +2,7 @@
 
 A lightweight, production-ready Android app that lets you capture voice notes
 from anywhere on your device with a custom hardware key combination, transcribes
-them with **Gemini 1.5 Flash**, and appends the transcript as a timestamped
+them with **Gemini 2.0 Flash**, and appends the transcript as a timestamped
 Markdown entry into your [Zettel Notes](https://github.com/zettelnotes-app)
 repository folder.
 
@@ -14,7 +14,7 @@ repository folder.
   pop up the recording overlay from any app, even the lockscreen.
 - **Floating overlay UI** — minimalist pulsing-mic animation with Stop & Cancel
   buttons; auto-stops after 60 s as a safety net.
-- **Gemini 1.5 Flash transcription** — AAC audio is Base64-encoded and POSTed
+- **Gemini 2.0 Flash transcription** — AAC audio is Base64-encoded and POSTed
   to the `generateContent` REST endpoint; only the plain transcript text is
   extracted from the response.
 - **Zettel Notes vault integration** — picks a vault folder via SAF

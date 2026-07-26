@@ -12,7 +12,7 @@
     <string name="settings_section_about">About</string>
 
     <string name="settings_gemini_key_label">Gemini API Key</string>
-    <string name="settings_gemini_key_placeholder">Paste your Gemini 1.5 Flash API key</string>
+    <string name="settings_gemini_key_placeholder">Paste your Gemini API key</string>
     <string name="settings_gemini_key_saved">API key saved</string>
 
     <string name="settings_vault_pick_button">Pick Zettel Notes Vault Folder</string>

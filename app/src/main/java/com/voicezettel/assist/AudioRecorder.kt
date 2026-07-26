@@ -9,7 +9,7 @@ import java.io.File
 
 /**
  * Thin wrapper around [MediaRecorder] that produces an AAC-encoded audio file
- * suitable for upload to the Gemini 1.5 Flash `inline_data` endpoint.
+ * suitable for upload to the Gemini 2.0 Flash `inline_data` endpoint.
  *
  * Lifecycle:
  *   start() -> (recording) -> stop() -> outputFile populated

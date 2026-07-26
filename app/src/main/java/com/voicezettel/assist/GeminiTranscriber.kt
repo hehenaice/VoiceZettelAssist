@@ -15,10 +15,10 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /**
- * Transcribes an AAC audio file using the Gemini 1.5 Flash REST API.
+ * Transcribes an AAC audio file using the Gemini 2.0 Flash REST API.
  *
  * Endpoint:
- *   https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=API_KEY
+ *   https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=API_KEY
  *
  * Payload shape (per project spec):
  *   { "contents": [{ "parts": [ { "text": "<prompt>" },
@@ -62,8 +62,9 @@ class GeminiTranscriber(
                 val body = resp.body?.string().orEmpty()
                 if (!resp.isSuccessful) {
                     Log.w(TAG, "Gemini HTTP ${resp.code}: $body")
-                    val msg = parseError(body) ?: "HTTP ${resp.code}"
-                    return@withContext Result.Failure(msg)
+                    val rawMsg = parseError(body) ?: "HTTP ${resp.code}"
+                    val friendly = humanizeError(resp.code, rawMsg)
+                    return@withContext Result.Failure(friendly)
                 }
                 val transcript = parseTranscript(body)
                 if (transcript.isBlank()) Result.Failure("Empty transcript")
@@ -75,6 +76,26 @@ class GeminiTranscriber(
         } catch (e: Exception) {
             Log.e(TAG, "Failed to parse Gemini response", e)
             Result.Failure("Parse error: ${e.message}")
+        }
+    }
+
+    /**
+     * Maps raw Gemini API error messages to short, actionable strings suitable
+     * for surfacing in a Toast. The raw messages can be hundreds of characters
+     * long (especially the 429 quota errors that list every quota metric) and
+     * would otherwise wrap off the screen.
+     */
+    private fun humanizeError(httpCode: Int, rawMsg: String): String {
+        // Truncate to ~140 chars to keep the toast readable.
+        val truncated = if (rawMsg.length > 140) rawMsg.take(137) + "..." else rawMsg
+        return when (httpCode) {
+            400 -> "Bad request: $truncated"
+            401 -> "Invalid API key — re-paste it in Settings"
+            403 -> "API key lacks permission (check AI Studio)"
+            404 -> "Model not found — update the app"
+            429 -> "Quota exhausted (free tier limit reached). Wait 24h or enable billing in Google AI Studio"
+            500, 502, 503 -> "Gemini server error — retry shortly"
+            else -> "HTTP $httpCode: $truncated"
         }
     }
 
@@ -127,8 +148,14 @@ class GeminiTranscriber(
 
     companion object {
         private const val TAG = "GeminiTranscriber"
+
+        // The Gemini 1.5 Flash model was deprecated and removed from the v1beta
+        // API in mid-2025. gemini-2.0-flash is the drop-in replacement: it
+        // supports the same `inline_data` audio input, is available on the
+        // free tier, and accepts identical generateContent payloads.
         private const val ENDPOINT_BASE =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+
         private const val PROMPT =
             "Transcribe the following audio accurately. Output only the plain transcript text with no extra commentary or quotes."
         private const val MIME_TYPE = "audio/aac"
