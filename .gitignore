@@ -1,0 +1,28 @@
+# Built files
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android Studio
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Kotlin
+*.class
+
+# Gradle wrapper binaries (regenerate via `gradle wrapper`)
+# NOTE: For CI to work, gradle-wrapper.jar SHOULD be committed — GitHub Actions
+# runs `./gradlew` which requires the jar. Commenting out the line below.
+#gradle/wrapper/gradle-wrapper.jar
+
+# Logs
+*.log

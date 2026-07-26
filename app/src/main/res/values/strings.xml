@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">VoiceZettelAssist</string>
+    <string name="accessibility_service_label">Voice Zettel Assist</string>
+    <string name="accessibility_service_description">Listens for volume key combinations to trigger voice notes that are transcribed via Gemini and appended to your Zettel Notes repository as timestamped Markdown.</string>
+
+    <!-- Settings UI -->
+    <string name="settings_title">VoiceZettelAssist Settings</string>
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_permissions">Permissions</string>
+    <string name="settings_section_trigger">Trigger Key Combination</string>
+    <string name="settings_section_vault">Zettel Notes Vault</string>
+    <string name="settings_section_about">About</string>
+
+    <string name="settings_gemini_key_label">Gemini API Key</string>
+    <string name="settings_gemini_key_placeholder">Paste your Gemini 1.5 Flash API key</string>
+    <string name="settings_gemini_key_saved">API key saved</string>
+
+    <string name="settings_vault_pick_button">Pick Zettel Notes Vault Folder</string>
+    <string name="settings_vault_unset">No vault folder selected</string>
+    <string name="settings_vault_set">Vault: %1$s</string>
+
+    <string name="settings_trigger_dropdown_label">Trigger combination</string>
+
+    <string name="settings_status_active">Accessibility Service: ACTIVE</string>
+    <string name="settings_status_inactive">Accessibility Service: NOT ENABLED</string>
+    <string name="settings_open_accessibility">Open Accessibility Settings</string>
+    <string name="settings_open_overlay">Grant Overlay Permission</string>
+
+    <!-- Overlay -->
+    <string name="overlay_listening">Listening… speak your note</string>
+    <string name="overlay_transcribing">Transcribing…</string>
+    <string name="overlay_stop">Stop</string>
+    <string name="overlay_cancel">Cancel</string>
+    <string name="overlay_error_generic">Could not transcribe audio. Check API key &amp; network.</string>
+
+    <!-- Toasts -->
+    <string name="toast_saved">Saved to Zettel Notes!</string>
+    <string name="toast_save_failed">Failed to save note to vault</string>
+    <string name="toast_no_api_key">Gemini API key not set — open app to configure</string>
+    <string name="toast_no_vault">Vault folder not set — open app to configure</string>
+
+    <!-- Foreground service notification -->
+    <string name="fg_channel_name">Voice Recording</string>
+    <string name="fg_channel_desc">Shows notification while voice note is being recorded and transcribed.</string>
+    <string name="fg_notification_title">VoiceZettelAssist</string>
+    <string name="fg_notification_text">Recording voice note…</string>
+</resources>

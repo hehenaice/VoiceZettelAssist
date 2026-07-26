@@ -1,0 +1,85 @@
+# Build & release a debug APK on every push to main and on every tag.
+#
+# Adapted from BaseMax/AndroidAutoBuildAPK's .github/workflows/build.yml,
+# modernized for the VoiceZettelAssist project:
+#
+#   * JDK 17 (we set JavaVersion.VERSION_17 in app/build.gradle.kts —
+#     BaseMax's original used JDK 11 which is insufficient for AGP 8.5).
+#   * actions/checkout@v4, actions/setup-java@v4 (the v3 versions used by
+#     BaseMax are deprecated on Node 12 runners).
+#   * Replaced the deprecated actions/create-release@v1 +
+#     actions/upload-release-asset@v1 pair with the GitHub CLI
+#     (`gh release create` / `gh release upload`). The deprecated actions
+#     also required a personal access token stored as `secrets.TOKEN`; the
+#     GitHub CLI works with the built-in `secrets.GITHUB_TOKEN` that
+#     Actions auto-provisions, so NO PAT needs to be created or stored.
+#   * Triggers on push to main and on version tags (v*.*.*) so every commit
+#     produces a downloadable APK under the workflow run's "Artifacts"
+#     section, and every tag publishes a proper GitHub Release.
+
+name: Build & Release APK
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:  # Manual "Run workflow" button in the Actions tab.
+
+# Default permissions — GITHUB_TOKEN only needs `contents: write` to create
+# releases. Keep the read-all default for everything else.
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: List built artifacts
+        run: ls -al app/build/outputs/apk/debug
+
+      # Always upload the APK as a workflow artifact — even on tag pushes —
+      # so you can download it from the Actions run page without needing a
+      # release.
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: voicezettel-assist-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      # Create a GitHub Release only when the workflow was triggered by a
+      # `v*.*.*` tag push. The `GITHUB_TOKEN` secret is auto-provisioned by
+      # Actions — no PAT needed.
+      - name: Create GitHub Release & attach APK
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          REPO="${{ github.repository }}"
+          echo "Creating release for tag $TAG in $REPO"
+          gh release create "$TAG" \
+            --repo "$REPO" \
+            --title "VoiceZettelAssist $TAG" \
+            --generate-notes \
+            "app/build/outputs/apk/debug/app-debug.apk#VoiceZettelAssist-$TAG.apk"
