@@ -441,7 +441,7 @@ private fun ServiceStatusCard(active: Boolean, onOpenSettings: () -> Unit) {
                 else stringResource(R.string.settings_status_inactive),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold
-            }
+            )
         }
         Spacer(Modifier.height(12.dp))
         OutlinedButton(
